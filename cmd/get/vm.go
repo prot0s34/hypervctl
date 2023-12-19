@@ -22,11 +22,13 @@ var vmCmd = &cobra.Command{
 			return
 		}
 
+		// move to separate place and use it more generic-way
 		if cfg.Hypervisor.Host == "" || cfg.Hypervisor.Auth.Username == "" || cfg.Hypervisor.Auth.Password == "" {
 			fmt.Println("Configuration error: Host, Username, or Password is missing.")
 			return
 		}
 
+		// exluce that part to standalone function/pkg with all connect-init logic
 		endpoint := winrm.NewEndpoint(cfg.Hypervisor.Host, cfg.Hypervisor.Port, false, true, nil, nil, nil, 0)
 		client, err := winrm.NewClient(endpoint, cfg.Hypervisor.Auth.Username, cfg.Hypervisor.Auth.Password)
 		if err != nil {
@@ -36,6 +38,7 @@ var vmCmd = &cobra.Command{
 		ctx, cancel := context.WithCancel(context.Background())
 		defer cancel()
 
+		// string-by-string copying output of powershell looks little ugly. Need to redesign that part, but call winrm broken by design in that approach %)
 		var stdout, stderr bytes.Buffer
 		command := "powershell -Command \"Get-VM | Format-Table -Property Name, State, Status -AutoSize | Out-String -Width 4096\""
 		_, err = client.RunWithContext(ctx, command, &stdout, &stderr)
@@ -49,6 +52,7 @@ var vmCmd = &cobra.Command{
 	},
 }
 
+// move loadconfig-related functional to separate file to avoid duplicating
 func loadConfig() (config.Config, error) {
 	var cfg config.Config
 	if err := viper.Unmarshal(&cfg); err != nil {
