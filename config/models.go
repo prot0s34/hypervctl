@@ -10,4 +10,3 @@ type Config struct {
 		} `mapstructure:"auth"`
 	} `mapstructure:"hypervisor"`
 }
-

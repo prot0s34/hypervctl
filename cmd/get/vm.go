@@ -8,7 +8,6 @@ import (
 
 	"github.com/masterzen/winrm"
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 )
 
 var vmCmd = &cobra.Command{
@@ -16,7 +15,7 @@ var vmCmd = &cobra.Command{
 	Short: "Get a list of VMs",
 	Long:  `Get a detailed list of Hyper-V VMs.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		cfg, err := loadConfig()
+		cfg, err := config.LoadConfig()
 		if err != nil {
 			fmt.Println("Error loading config:", err)
 			return
@@ -50,13 +49,4 @@ var vmCmd = &cobra.Command{
 
 		fmt.Println(stdout.String())
 	},
-}
-
-// move loadconfig-related functional to separate file to avoid duplicating
-func loadConfig() (config.Config, error) {
-	var cfg config.Config
-	if err := viper.Unmarshal(&cfg); err != nil {
-		return cfg, err
-	}
-	return cfg, nil
 }
