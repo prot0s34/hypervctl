@@ -17,13 +17,7 @@ var vmCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		cfg, err := config.LoadConfig()
 		if err != nil {
-			fmt.Println("Error loading config:", err)
-			return
-		}
-
-		// move to separate place and use it more generic-way
-		if cfg.Hypervisor.Host == "" || cfg.Hypervisor.Auth.Username == "" || cfg.Hypervisor.Auth.Password == "" {
-			fmt.Println("Configuration error: Host, Username, or Password is missing.")
+			fmt.Println(err)
 			return
 		}
 
