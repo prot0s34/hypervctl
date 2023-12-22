@@ -12,9 +12,9 @@ var vmCmd = &cobra.Command{
 	Use:   "vm [vmname]",
 	Short: "Describe a VM",
 	Long:  `Describe detailed information about a specific VM.`,
-	Args:  cobra.ExactArgs(1), // Expect exactly one argument: vmname
+	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		vmName := args[0] // The name of the VM to describe
+		vmName := args[0]
 
 		cfg, err := config.LoadConfig()
 		if err != nil {
@@ -29,7 +29,7 @@ var vmCmd = &cobra.Command{
 		}
 		defer cancel()
 
-		// Commands to run
+		// Find way to exclude only important info from common list
 		commands := []string{
 			fmt.Sprintf("powershell -Command \"Get-VM -Name '%s' | Format-List *\"", vmName),
 			fmt.Sprintf("powershell -Command \"Get-VMProcessor -VMName '%s' | Format-List *\"", vmName),
