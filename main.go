@@ -4,9 +4,11 @@ import (
 	"fmt"
 	"os"
 
+	"hypervctl/cmd/describe"
+	"hypervctl/cmd/get"
+
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"hypervctl/cmd/get"
 )
 
 var cfgFile string
@@ -30,6 +32,7 @@ func Execute() {
 func init() {
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.hyperv/config)")
 	rootCmd.AddCommand(get.Cmd)
+	rootCmd.AddCommand(describe.Cmd)
 }
 
 func initConfig() {
