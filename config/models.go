@@ -1,5 +1,6 @@
 package config
 
+// add https true/false to Hypervisor.Auth sub-struct
 type Config struct {
 	Hypervisor struct {
 		Host string `mapstructure:"host"`

@@ -26,7 +26,8 @@ var vmCmd = &cobra.Command{
 		}
 		defer cancel()
 
-		// string-by-string copying output of powershell looks little ugly. Need to redesign that part, but call winrm broken by design in that approach %)
+		// string-by-string copying output of powershell looks little ugly.
+		// Strongly needed to redesign that part, but call to winrm for hyperv communitation broken by design in that case. %)
 		var stdout, stderr bytes.Buffer
 		command := "powershell -Command \"Get-VM | Format-Table -Property Name, State, Status -AutoSize | Out-String -Width 4096\""
 		_, err = client.RunWithContext(ctx, command, &stdout, &stderr)
