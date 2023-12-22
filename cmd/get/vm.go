@@ -2,12 +2,10 @@ package get
 
 import (
 	"bytes"
-	"context"
 	"fmt"
-	"hypervctl/config"
-
-	"github.com/masterzen/winrm"
 	"github.com/spf13/cobra"
+	"hypervctl/config"
+	"hypervctl/winrmclient"
 )
 
 var vmCmd = &cobra.Command{
@@ -21,14 +19,11 @@ var vmCmd = &cobra.Command{
 			return
 		}
 
-		// exluce that part to standalone function/pkg with all connect-init logic
-		endpoint := winrm.NewEndpoint(cfg.Hypervisor.Host, cfg.Hypervisor.Port, false, true, nil, nil, nil, 0)
-		client, err := winrm.NewClient(endpoint, cfg.Hypervisor.Auth.Username, cfg.Hypervisor.Auth.Password)
+		client, ctx, cancel, err := winrmclient.InitializeClient(cfg)
 		if err != nil {
 			fmt.Println("Error creating WinRM client:", err)
 			return
 		}
-		ctx, cancel := context.WithCancel(context.Background())
 		defer cancel()
 
 		// string-by-string copying output of powershell looks little ugly. Need to redesign that part, but call winrm broken by design in that approach %)
